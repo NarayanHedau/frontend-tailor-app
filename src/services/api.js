@@ -44,6 +44,10 @@ export const customerAPI = {
   create: (data) => api.post('/customers', data),
   update: (id, data) => api.put(`/customers/${id}`, data),
   delete: (id) => api.delete(`/customers/${id}`),
+  // Measurement profiles
+  addProfile: (id, data) => api.post(`/customers/${id}/measurements`, data),
+  updateProfile: (id, profileId, data) => api.put(`/customers/${id}/measurements/${profileId}`, data),
+  deleteProfile: (id, profileId) => api.delete(`/customers/${id}/measurements/${profileId}`),
 };
 
 // ─── Orders ────────────────────────────────────────────────────────────────
@@ -54,6 +58,8 @@ export const orderAPI = {
   update: (id, data) => api.put(`/orders/${id}`, data),
   delete: (id) => api.delete(`/orders/${id}`),
   getStats: () => api.get('/orders/stats'),
+  getDeadlines: () => api.get('/orders/deadlines'),
+  getChartData: (params) => api.get('/orders/chart-data', { params }),
   updateItemStatus: (orderId, itemId, status) =>
     api.put(`/orders/${orderId}/items/${itemId}/status`, { status }),
   updateMeasurements: (orderId, itemId, data) =>
@@ -70,6 +76,45 @@ export const invoiceAPI = {
   getByOrder: (orderId) => api.get(`/invoices/order/${orderId}`),
   create: (data) => api.post('/invoices', data),
   recordPayment: (id, data) => api.post(`/invoices/${id}/payment`, data),
+};
+
+// ─── Suppliers ────────────────────────────────────────────────────────────
+export const supplierAPI = {
+  getAll: (params) => api.get('/suppliers', { params }),
+  getById: (id) => api.get(`/suppliers/${id}`),
+  create: (data) => api.post('/suppliers', data),
+  update: (id, data) => api.put(`/suppliers/${id}`, data),
+  delete: (id) => api.delete(`/suppliers/${id}`),
+};
+
+// ─── Products / Inventory ─────────────────────────────────────────────────
+export const productAPI = {
+  getAll: (params) => api.get('/products', { params }),
+  getById: (id) => api.get(`/products/${id}`),
+  create: (data) => api.post('/products', data),
+  update: (id, data) => api.put(`/products/${id}`, data),
+  delete: (id) => api.delete(`/products/${id}`),
+};
+
+// ─── Purchases ────────────────────────────────────────────────────────────
+export const purchaseAPI = {
+  getAll: (params) => api.get('/purchases', { params }),
+  getById: (id) => api.get(`/purchases/${id}`),
+  create: (data) => api.post('/purchases', data),
+  delete: (id) => api.delete(`/purchases/${id}`),
+  recordPayment: (id, data) => api.post(`/purchases/${id}/payment`, data),
+  getStats: () => api.get('/purchases/stats'),
+  getBusinessChart: (params) => api.get('/purchases/business-chart', { params }),
+};
+
+// ─── Sales ────────────────────────────────────────────────────────────────
+export const saleAPI = {
+  getAll: (params) => api.get('/sales', { params }),
+  getById: (id) => api.get(`/sales/${id}`),
+  create: (data) => api.post('/sales', data),
+  delete: (id) => api.delete(`/sales/${id}`),
+  recordPayment: (id, data) => api.post(`/sales/${id}/payment`, data),
+  getStats: () => api.get('/sales/stats'),
 };
 
 // ─── Public Tracking ───────────────────────────────────────────────────────

@@ -91,7 +91,7 @@ export default function InvoicePage() {
   const customer = order.customer_id || {};
 
   return (
-    <div className="max-w-3xl mx-auto space-y-5">
+    <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

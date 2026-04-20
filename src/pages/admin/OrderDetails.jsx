@@ -82,7 +82,7 @@ export default function OrderDetails() {
   const trackingUrl = `${window.location.origin}/track/${order.tracking_id}`;
 
   return (
-    <div className="space-y-5 max-w-5xl mx-auto">
+    <div className="space-y-5">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">

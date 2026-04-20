@@ -6,17 +6,25 @@ const pageTitles = {
   '/admin/dashboard': 'Dashboard',
   '/admin/orders': 'All Orders',
   '/admin/orders/new': 'Create New Order',
+  '/admin/customers': 'Customers',
+  '/admin/calendar': 'Deadlines',
+  '/admin/inventory': 'Inventory',
+  '/admin/purchases': 'Purchases',
+  '/admin/sales': 'Sales',
+  '/admin/business': 'Business Overview',
 };
 
 export default function Navbar({ onMenuClick }) {
   const { darkMode, toggleDarkMode } = useThemeStore();
   const { pathname } = useLocation();
 
-  const title = pageTitles[pathname] ||
-    (pathname.includes('/invoice') ? 'Invoice' : 'Order Details');
+  const title =
+    pageTitles[pathname] ||
+    (pathname.includes('/admin/customers/') ? 'Customer Details' :
+    pathname.includes('/invoice') ? 'Invoice' : 'Order Details');
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 md:px-6 py-4 flex items-center justify-between flex-shrink-0">
+    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 h-[65px] px-4 md:px-6 flex items-center justify-between flex-shrink-0">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}

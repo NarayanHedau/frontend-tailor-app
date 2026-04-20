@@ -3,9 +3,14 @@ import {
   HomeIcon,
   ClipboardDocumentListIcon,
   PlusCircleIcon,
-  DocumentTextIcon,
   XMarkIcon,
   ScissorsIcon,
+  UsersIcon,
+  CalendarDaysIcon,
+  CubeIcon,
+  ShoppingCartIcon,
+  BanknotesIcon,
+  ChartBarSquareIcon,
 } from '@heroicons/react/24/outline';
 import { useAuthStore } from '../../store/authStore';
 import toast from 'react-hot-toast';
@@ -14,6 +19,13 @@ const navItems = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: HomeIcon },
   { to: '/admin/orders', label: 'All Orders', icon: ClipboardDocumentListIcon },
   { to: '/admin/orders/new', label: 'New Order', icon: PlusCircleIcon },
+  { to: '/admin/customers', label: 'Customers', icon: UsersIcon },
+  { to: '/admin/calendar', label: 'Deadlines', icon: CalendarDaysIcon },
+  { heading: 'Store' },
+  { to: '/admin/inventory', label: 'Inventory', icon: CubeIcon },
+  { to: '/admin/purchases', label: 'Purchases', icon: ShoppingCartIcon },
+  { to: '/admin/sales', label: 'Sales', icon: BanknotesIcon },
+  { to: '/admin/business', label: 'Business', icon: ChartBarSquareIcon },
 ];
 
 export default function Sidebar({ open, onClose }) {
@@ -45,7 +57,7 @@ export default function Sidebar({ open, onClose }) {
         `}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-700">
+        <div className="flex items-center justify-between px-6 h-[65px] border-b border-gray-700 flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
               <ScissorsIcon className="w-5 h-5 text-white" />
@@ -62,23 +74,30 @@ export default function Sidebar({ open, onClose }) {
 
         {/* Navigation */}
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
-          {navItems.map(({ to, label, icon: Icon }) => (
-            <NavLink
-              key={to}
-              to={to}
-              onClick={onClose}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                }`
-              }
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" />
-              {label}
-            </NavLink>
-          ))}
+          {navItems.map((item) =>
+            item.heading ? (
+              <p key={item.heading} className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold px-3 pt-4 pb-1">
+                {item.heading}
+              </p>
+            ) : (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  }`
+                }
+              >
+                <item.icon className="w-5 h-5 flex-shrink-0" />
+                {item.label}
+              </NavLink>
+            )
+          )}
         </nav>
 
         {/* User footer */}

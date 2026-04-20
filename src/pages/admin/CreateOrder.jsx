@@ -30,12 +30,37 @@ export default function CreateOrder() {
   const [notes, setNotes] = useState('');
   const [expandedMeasurements, setExpandedMeasurements] = useState({});
 
+  const [customerProfiles, setCustomerProfiles] = useState([]);
+
   const searchCustomers = async (q) => {
     if (q.length < 2) { setCustomerResults([]); return; }
     try {
       const { data } = await customerAPI.getAll({ search: q, limit: 5 });
       setCustomerResults(data.data);
     } catch { /* ignore */ }
+  };
+
+  // Load measurement profiles when customer is selected
+  const selectCustomer = async (c) => {
+    setSelectedCustomer(c);
+    setCustomerSearch(c.name);
+    setCustomerResults([]);
+    try {
+      const { data } = await customerAPI.getById(c._id);
+      setCustomerProfiles(data.data.measurement_profiles || []);
+    } catch { /* ignore */ }
+  };
+
+  const applyProfile = (itemIdx, profile) => {
+    const updated = [...items];
+    const m = {};
+    ['chest', 'waist', 'hips', 'shoulder', 'sleeve', 'length', 'neck', 'inseam', 'thigh'].forEach(
+      (f) => { m[f] = profile[f] || ''; }
+    );
+    m.notes = profile.notes || '';
+    updated[itemIdx] = { ...updated[itemIdx], measurements: m };
+    setItems(updated);
+    setExpandedMeasurements((prev) => ({ ...prev, [itemIdx]: true }));
   };
 
   const addItem = () => setItems([...items, emptyItem()]);
@@ -70,8 +95,27 @@ export default function CreateOrder() {
           setLoading(false);
           return;
         }
-        const { data } = await customerAPI.create(newCustomer);
-        customerId = data.data._id;
+        try {
+          const { data } = await customerAPI.create(newCustomer);
+          customerId = data.data._id;
+        } catch (err) {
+          if (err.response?.status === 409) {
+            const existing = err.response.data.existingCustomer;
+            const useExisting = window.confirm(
+              `Customer "${existing.name}" already exists with phone ${existing.phone}.\n\nClick OK to use the existing customer, or Cancel to go back and edit.`
+            );
+            if (useExisting) {
+              customerId = existing._id;
+              setSelectedCustomer(existing);
+              setIsNewCustomer(false);
+            } else {
+              setLoading(false);
+              return;
+            }
+          } else {
+            throw err;
+          }
+        }
       } else {
         if (!selectedCustomer) {
           toast.error('Please select a customer');
@@ -109,9 +153,9 @@ export default function CreateOrder() {
   const totalAmount = items.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.quantity) || 1), 0);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {/* Customer Section */}
-      <div className="card p-6">
+      <div className="card p-5">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Customer Details</h3>
 
         <div className="flex gap-3 mb-4">
@@ -156,11 +200,7 @@ export default function CreateOrder() {
                   <button
                     key={c._id}
                     type="button"
-                    onClick={() => {
-                      setSelectedCustomer(c);
-                      setCustomerSearch(c.name);
-                      setCustomerResults([]);
-                    }}
+                    onClick={() => selectCustomer(c)}
                     className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-0"
                   >
                     <div className="font-medium text-sm">{c.name}</div>
@@ -177,7 +217,7 @@ export default function CreateOrder() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => { setSelectedCustomer(null); setCustomerSearch(''); }}
+                  onClick={() => { setSelectedCustomer(null); setCustomerSearch(''); setCustomerProfiles([]); }}
                   className="text-blue-400 hover:text-blue-600"
                 >
                   <TrashIcon className="w-4 h-4" />
@@ -222,7 +262,7 @@ export default function CreateOrder() {
       </div>
 
       {/* Order Dates */}
-      <div className="card p-6">
+      <div className="card p-5">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Order Dates</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -247,7 +287,7 @@ export default function CreateOrder() {
       </div>
 
       {/* Items */}
-      <div className="card p-6">
+      <div className="card p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Items</h3>
           <button type="button" onClick={addItem} className="btn-secondary text-sm">
@@ -258,7 +298,7 @@ export default function CreateOrder() {
 
         <div className="space-y-4">
           {items.map((item, idx) => (
-            <div key={idx} className="border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+            <div key={idx} className="border border-gray-100 dark:border-gray-700/50 rounded-xl p-4 bg-gray-50/50 dark:bg-gray-900/30">
               <div className="flex items-start justify-between mb-4">
                 <h4 className="font-medium text-gray-700 dark:text-gray-300">Item {idx + 1}</h4>
                 {items.length > 1 && (
@@ -315,14 +355,35 @@ export default function CreateOrder() {
                 </div>
               </div>
 
-              {/* Measurements Toggle */}
-              <button
-                type="button"
-                onClick={() => toggleMeasurements(idx)}
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-              >
-                {expandedMeasurements[idx] ? '▲ Hide' : '▼ Add'} Measurements
-              </button>
+              {/* Measurements Toggle & Profile Auto-fill */}
+              <div className="flex items-center gap-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => toggleMeasurements(idx)}
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  {expandedMeasurements[idx] ? '▲ Hide' : '▼ Add'} Measurements
+                </button>
+
+                {customerProfiles.length > 0 && (
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs text-gray-400">Auto-fill:</span>
+                    {customerProfiles
+                      .filter((p) => p.label === item.type || customerProfiles.length <= 3)
+                      .slice(0, 3)
+                      .map((p) => (
+                        <button
+                          key={p._id}
+                          type="button"
+                          onClick={() => applyProfile(idx, p)}
+                          className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-md hover:bg-green-200 dark:hover:bg-green-900/50 font-medium"
+                        >
+                          {p.label}
+                        </button>
+                      ))}
+                  </div>
+                )}
+              </div>
 
               {expandedMeasurements[idx] && (
                 <div className="mt-3 grid grid-cols-3 md:grid-cols-5 gap-3 p-3 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
@@ -369,7 +430,7 @@ export default function CreateOrder() {
       </div>
 
       {/* Notes */}
-      <div className="card p-6">
+      <div className="card p-5">
         <label className="label">Order Notes</label>
         <textarea
           className="input resize-none"

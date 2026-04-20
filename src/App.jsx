@@ -7,6 +7,13 @@ import CreateOrder from './pages/admin/CreateOrder';
 import OrdersList from './pages/admin/OrdersList';
 import OrderDetails from './pages/admin/OrderDetails';
 import InvoicePage from './pages/admin/InvoicePage';
+import CustomersList from './pages/admin/CustomersList';
+import CustomerDetail from './pages/admin/CustomerDetail';
+import CalendarPage from './pages/admin/CalendarPage';
+import InventoryPage from './pages/admin/InventoryPage';
+import PurchasesPage from './pages/admin/PurchasesPage';
+import SalesPage from './pages/admin/SalesPage';
+import BusinessOverview from './pages/admin/BusinessOverview';
 import TrackingPage from './pages/customer/TrackingPage';
 
 const ProtectedRoute = ({ children }) => {
@@ -38,6 +45,13 @@ export default function App() {
         <Route path="orders/new" element={<CreateOrder />} />
         <Route path="orders/:id" element={<OrderDetails />} />
         <Route path="orders/:id/invoice" element={<InvoicePage />} />
+        <Route path="customers" element={<CustomersList />} />
+        <Route path="customers/:id" element={<CustomerDetail />} />
+        <Route path="calendar" element={<CalendarPage />} />
+        <Route path="inventory" element={<InventoryPage />} />
+        <Route path="purchases" element={<PurchasesPage />} />
+        <Route path="sales" element={<SalesPage />} />
+        <Route path="business" element={<BusinessOverview />} />
       </Route>
 
       {/* Default redirect */}
