@@ -1,0 +1,136 @@
+====================================================================
+ TAILOR APP - FRONTEND SETUP GUIDE
+====================================================================
+
+This is the part of the app that you see in your web browser. It has
+the login page, dashboard, order forms, invoices, and everything
+else you click on.
+
+IMPORTANT: Set up the BACKEND first, before doing these steps. See
+the SETUP.txt file inside the backend-tailor-app folder.
+
+If something goes wrong, scroll to TROUBLESHOOTING at the bottom.
+
+
+--------------------------------------------------------------------
+ WHAT YOU NEED BEFORE STARTING
+--------------------------------------------------------------------
+
+Node.js (same free program used by the backend)
+
+  Download from:  https://nodejs.org
+  Choose the "LTS" version (green button on the left).
+
+  If you already installed it for the backend, you don't need
+  to do it again - skip to Step 1.
+
+
+--------------------------------------------------------------------
+ STEP 1 - INSTALL THE FRONTEND
+--------------------------------------------------------------------
+
+Open a command window.
+
+On Windows:
+  Press the Windows key, type "cmd", press Enter.
+
+On Mac:
+  Press Cmd+Space, type "Terminal", press Enter.
+
+Go to the frontend folder. Type this and press Enter:
+
+  cd path\to\frontend-tailor-app
+
+Replace "path\to" with the folder where you unzipped the app.
+Tip on Windows: type "cd " (with a space), then drag the folder
+into the command window to paste the full path.
+
+Now install the packages. Type:
+
+  npm install
+
+Wait 1-3 minutes. You will see some yellow warnings - that's
+normal. When it finishes, the command prompt comes back.
+
+
+--------------------------------------------------------------------
+ STEP 2 - CREATE YOUR CONFIGURATION FILE
+--------------------------------------------------------------------
+
+Inside the frontend-tailor-app folder, find the file
+
+  .env.example
+
+Make a copy and name the copy
+
+  .env
+
+In the same command window, type:
+
+  copy .env.example .env       (on Windows)
+  cp .env.example .env          (on Mac or Linux)
+
+
+--------------------------------------------------------------------
+ STEP 3 - CHECK THE CONFIGURATION FILE
+--------------------------------------------------------------------
+
+Open the new ".env" file with your text editor (Notepad, Notepad++,
+VS Code - anything simple).
+
+You will see just one line:
+
+  VITE_API_BASE_URL=http://localhost:5000/api
+
+This line tells the dashboard where to find the backend server.
+
+  - If you are just running the app on your own computer to try
+    it out, LEAVE IT AS IS. You do not need to change anything.
+
+  - Later, when you put the app on a real website, change it to
+    your backend's address. Example:
+      VITE_API_BASE_URL=https://api.mytailorshop.com/api
+
+Save and close the file.
+
+
+--------------------------------------------------------------------
+ THAT'S IT - YOU'RE DONE WITH SETUP
+--------------------------------------------------------------------
+
+The frontend is ready. To actually open the dashboard in your
+browser, look at:
+
+  HOW-TO-RUN.txt
+
+which is in the main app folder (one level above this one).
+
+
+--------------------------------------------------------------------
+ TROUBLESHOOTING
+--------------------------------------------------------------------
+
+Problem: "'npm' is not recognized"
+Fix:     Node.js is not installed yet, or your command window was
+         already open when you installed it. Install Node.js, then
+         close the command window and open a new one.
+
+Problem: After I log in, the browser says "Network error"
+Fix:     The backend server is not running. You must start the
+         backend FIRST. See HOW-TO-RUN.txt.
+
+Problem: "npm install" fails with errors about Python or compilers
+Fix:     Inside the frontend-tailor-app folder, delete the
+         "node_modules" folder and the "package-lock.json" file,
+         then run "npm install" again.
+
+Problem: The .env file doesn't show when I look in the folder
+Fix:     Windows hides files that start with a dot. In File
+         Explorer, click "View" at the top, and check the box
+         for "Hidden items".
+
+Problem: Dashboard shows blank white page in browser
+Fix:     Press F12 in the browser to open the developer tools,
+         then look in the "Console" tab for red error messages.
+         Most commonly, the backend is not running - start it
+         (see HOW-TO-RUN.txt) and refresh the page.

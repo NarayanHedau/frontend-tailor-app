@@ -48,7 +48,7 @@ export default function LoginPage() {
               <input
                 type="email"
                 className="input"
-                placeholder="admin@tailorshop.com"
+                placeholder="you@example.com"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 required
@@ -92,10 +92,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-xs text-blue-700 dark:text-blue-300">
-            <strong>Default credentials:</strong> admin@tailorshop.com / Admin@123
-          </div>
         </div>
       </div>
     </div>
