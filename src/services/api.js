@@ -117,6 +117,17 @@ export const saleAPI = {
   getStats: () => api.get('/sales/stats'),
 };
 
+// ─── Tenants (superadmin only) ────────────────────────────────────────────
+export const tenantAPI = {
+  getAll: (params) => api.get('/tenants', { params }),
+  getById: (id) => api.get(`/tenants/${id}`),
+  create: (data) => api.post('/tenants', data),
+  update: (id, data) => api.put(`/tenants/${id}`, data),
+  delete: (id) => api.delete(`/tenants/${id}`),
+  toggleStatus: (id, isActive) => api.patch(`/tenants/${id}/status`, { isActive }),
+  resetPassword: (id) => api.post(`/tenants/${id}/reset-password`),
+};
+
 // ─── Public Tracking ───────────────────────────────────────────────────────
 export const trackingAPI = {
   getInfo: (trackingId) => api.get(`/track/${trackingId}`),

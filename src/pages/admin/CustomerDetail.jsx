@@ -34,6 +34,13 @@ export default function CustomerDetail() {
   const [profileForm, setProfileForm] = useState(emptyProfile());
   const [saving, setSaving] = useState(false);
 
+  const sanitizeMeasurementValue = (value) => {
+    if (value === '') return '';
+    const cleaned = value.replace(/[^0-9.]/g, '');
+    const [integer, ...decimals] = cleaned.split('.');
+    return integer + (decimals.length > 0 ? `.${decimals.join('')}` : '');
+  };
+
   useEffect(() => { fetchCustomer(); }, [id]);
 
   const fetchCustomer = async () => {
@@ -213,12 +220,13 @@ export default function CustomerDetail() {
                 <div key={field}>
                   <label className="label capitalize">{field} (in)</label>
                   <input
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
+                    pattern="^\d*\.?\d*$"
                     className="input"
-                    step="0.5"
                     placeholder="0"
                     value={profileForm[field]}
-                    onChange={(e) => setProfileForm({ ...profileForm, [field]: e.target.value })}
+                    onChange={(e) => setProfileForm({ ...profileForm, [field]: sanitizeMeasurementValue(e.target.value) })}
                   />
                 </div>
               ))}

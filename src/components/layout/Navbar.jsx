@@ -12,6 +12,7 @@ const pageTitles = {
   '/admin/purchases': 'Purchases',
   '/admin/sales': 'Sales',
   '/admin/business': 'Business Overview',
+  '/admin/tenants': 'Tailor Tenants',
 };
 
 export default function Navbar({ onMenuClick }) {

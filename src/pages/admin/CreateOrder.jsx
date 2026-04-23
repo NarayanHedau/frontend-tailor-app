@@ -30,6 +30,13 @@ export default function CreateOrder() {
   const [notes, setNotes] = useState('');
   const [expandedMeasurements, setExpandedMeasurements] = useState({});
 
+  const sanitizeMeasurementValue = (value) => {
+    if (value === '') return '';
+    const cleaned = value.replace(/[^0-9.]/g, '');
+    const [integer, ...decimals] = cleaned.split('.');
+    return integer + (decimals.length > 0 ? `.${decimals.join('')}` : '');
+  };
+
   const [customerProfiles, setCustomerProfiles] = useState([]);
 
   const searchCustomers = async (q) => {
@@ -392,12 +399,13 @@ export default function CreateOrder() {
                       <div key={field}>
                         <label className="label capitalize">{field} (in)</label>
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="decimal"
+                          pattern="^\d*\.?\d*$"
                           className="input"
                           placeholder="0"
-                          step="0.5"
                           value={item.measurements[field]}
-                          onChange={(e) => updateMeasurement(idx, field, e.target.value)}
+                          onChange={(e) => updateMeasurement(idx, field, sanitizeMeasurementValue(e.target.value))}
                         />
                       </div>
                     )

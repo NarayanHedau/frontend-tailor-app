@@ -11,11 +11,12 @@ import {
   ShoppingCartIcon,
   BanknotesIcon,
   ChartBarSquareIcon,
+  BuildingStorefrontIcon,
 } from '@heroicons/react/24/outline';
 import { useAuthStore } from '../../store/authStore';
 import toast from 'react-hot-toast';
 
-const navItems = [
+const adminNav = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: HomeIcon },
   { to: '/admin/orders', label: 'All Orders', icon: ClipboardDocumentListIcon },
   { to: '/admin/orders/new', label: 'New Order', icon: PlusCircleIcon },
@@ -28,9 +29,17 @@ const navItems = [
   { to: '/admin/business', label: 'Business', icon: ChartBarSquareIcon },
 ];
 
+const superadminNav = [
+  { to: '/admin/tenants', label: 'Tailor Tenants', icon: BuildingStorefrontIcon },
+];
+
 export default function Sidebar({ open, onClose }) {
   const navigate = useNavigate();
   const { logout, user } = useAuthStore();
+
+  const isSuperadmin = user?.role === 'superadmin';
+  const navItems = isSuperadmin ? superadminNav : adminNav;
+  const panelLabel = isSuperadmin ? 'Platform Admin' : 'Admin Panel';
 
   const handleLogout = () => {
     logout();
@@ -64,7 +73,7 @@ export default function Sidebar({ open, onClose }) {
             </div>
             <div>
               <h1 className="font-bold text-sm leading-none">Tailor Tracker</h1>
-              <p className="text-xs text-gray-400 mt-0.5">Admin Panel</p>
+              <p className="text-xs text-gray-400 mt-0.5">{panelLabel}</p>
             </div>
           </div>
           <button onClick={onClose} className="lg:hidden text-gray-400 hover:text-white">

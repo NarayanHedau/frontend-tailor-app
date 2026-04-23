@@ -24,8 +24,14 @@ export default function BusinessOverview() {
   const [loading, setLoading] = useState(true);
 
   // Date filter
-  const today = new Date().toISOString().split('T')[0];
-  const defaultStart = new Date(new Date().getFullYear(), new Date().getMonth() - 11, 1).toISOString().split('T')[0];
+  const toLocalYMD = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+  const today = toLocalYMD(new Date());
+  const defaultStart = toLocalYMD(new Date(new Date().getFullYear(), new Date().getMonth() - 11, 1));
   const [chartStartDate, setChartStartDate] = useState(defaultStart);
   const [chartEndDate, setChartEndDate] = useState(today);
 
@@ -68,8 +74,8 @@ export default function BusinessOverview() {
     const end = new Date();
     const start = new Date();
     start.setDate(start.getDate() - days);
-    const s = start.toISOString().split('T')[0];
-    const e = end.toISOString().split('T')[0];
+    const s = toLocalYMD(start);
+    const e = toLocalYMD(end);
     setChartStartDate(s);
     setChartEndDate(e);
     fetchChartData(s, e);

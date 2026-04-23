@@ -5,16 +5,18 @@ import { useThemeStore } from '../../store/themeStore';
 import { ScissorsIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 
+const landingPathForRole = (role) => (role === 'superadmin' ? '/admin/tenants' : '/admin/dashboard');
+
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login, loading, token } = useAuthStore();
+  const { login, loading, token, user } = useAuthStore();
   const { initTheme } = useThemeStore();
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     initTheme();
-    if (token) navigate('/admin/dashboard');
+    if (token) navigate(landingPathForRole(user?.role));
   }, [token]);
 
   const handleSubmit = async (e) => {
@@ -22,7 +24,7 @@ export default function LoginPage() {
     const result = await login(form.email, form.password);
     if (result.success) {
       toast.success('Welcome back!');
-      navigate('/admin/dashboard');
+      navigate(landingPathForRole(result.role));
     } else {
       toast.error(result.message);
     }

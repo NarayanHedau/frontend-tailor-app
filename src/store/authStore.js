@@ -16,7 +16,7 @@ export const useAuthStore = create(
           const { token, ...user } = data.data;
           set({ user, token, loading: false });
           api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          return { success: true };
+          return { success: true, role: user.role };
         } catch (err) {
           set({ loading: false });
           return { success: false, message: err.response?.data?.message || 'Login failed' };

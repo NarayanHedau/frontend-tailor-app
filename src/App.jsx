@@ -14,11 +14,28 @@ import InventoryPage from './pages/admin/InventoryPage';
 import PurchasesPage from './pages/admin/PurchasesPage';
 import SalesPage from './pages/admin/SalesPage';
 import BusinessOverview from './pages/admin/BusinessOverview';
+import TenantsPage from './pages/superadmin/TenantsPage';
 import TrackingPage from './pages/customer/TrackingPage';
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuthStore();
   return token ? children : <Navigate to="/admin/login" replace />;
+};
+
+const landingPathForRole = (role) => (role === 'superadmin' ? '/admin/tenants' : '/admin/dashboard');
+
+const RoleRoute = ({ allow, children }) => {
+  const { user } = useAuthStore();
+  if (!user) return null;
+  if (!allow.includes(user.role)) {
+    return <Navigate to={landingPathForRole(user.role)} replace />;
+  }
+  return children;
+};
+
+const RoleIndexRedirect = () => {
+  const { user } = useAuthStore();
+  return <Navigate to={landingPathForRole(user?.role)} replace />;
 };
 
 export default function App() {
@@ -39,24 +56,29 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="orders" element={<OrdersList />} />
-        <Route path="orders/new" element={<CreateOrder />} />
-        <Route path="orders/:id" element={<OrderDetails />} />
-        <Route path="orders/:id/invoice" element={<InvoicePage />} />
-        <Route path="customers" element={<CustomersList />} />
-        <Route path="customers/:id" element={<CustomerDetail />} />
-        <Route path="calendar" element={<CalendarPage />} />
-        <Route path="inventory" element={<InventoryPage />} />
-        <Route path="purchases" element={<PurchasesPage />} />
-        <Route path="sales" element={<SalesPage />} />
-        <Route path="business" element={<BusinessOverview />} />
+        <Route index element={<RoleIndexRedirect />} />
+
+        {/* Superadmin-only */}
+        <Route path="tenants" element={<RoleRoute allow={['superadmin']}><TenantsPage /></RoleRoute>} />
+
+        {/* Admin-only (tailor-shop operations) */}
+        <Route path="dashboard" element={<RoleRoute allow={['admin', 'tailor']}><Dashboard /></RoleRoute>} />
+        <Route path="orders" element={<RoleRoute allow={['admin', 'tailor']}><OrdersList /></RoleRoute>} />
+        <Route path="orders/new" element={<RoleRoute allow={['admin', 'tailor']}><CreateOrder /></RoleRoute>} />
+        <Route path="orders/:id" element={<RoleRoute allow={['admin', 'tailor']}><OrderDetails /></RoleRoute>} />
+        <Route path="orders/:id/invoice" element={<RoleRoute allow={['admin', 'tailor']}><InvoicePage /></RoleRoute>} />
+        <Route path="customers" element={<RoleRoute allow={['admin', 'tailor']}><CustomersList /></RoleRoute>} />
+        <Route path="customers/:id" element={<RoleRoute allow={['admin', 'tailor']}><CustomerDetail /></RoleRoute>} />
+        <Route path="calendar" element={<RoleRoute allow={['admin', 'tailor']}><CalendarPage /></RoleRoute>} />
+        <Route path="inventory" element={<RoleRoute allow={['admin', 'tailor']}><InventoryPage /></RoleRoute>} />
+        <Route path="purchases" element={<RoleRoute allow={['admin', 'tailor']}><PurchasesPage /></RoleRoute>} />
+        <Route path="sales" element={<RoleRoute allow={['admin', 'tailor']}><SalesPage /></RoleRoute>} />
+        <Route path="business" element={<RoleRoute allow={['admin', 'tailor']}><BusinessOverview /></RoleRoute>} />
       </Route>
 
       {/* Default redirect */}
-      <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
+      <Route path="/" element={<Navigate to="/admin" replace />} />
+      <Route path="*" element={<Navigate to="/admin" replace />} />
     </Routes>
   );
 }
