@@ -124,7 +124,7 @@ export default function OrderDetails() {
           <p className="text-lg font-bold text-gray-800 dark:text-white">{customer.name}</p>
           <a
             href={`tel:${customer.phone}`}
-            className="flex items-center gap-1 text-blue-600 hover:text-blue-700 mt-1"
+            className="flex items-center gap-1 text-primary-600 hover:text-primary-700 mt-1"
           >
             <PhoneIcon className="w-4 h-4" />
             {customer.phone}
@@ -149,7 +149,7 @@ export default function OrderDetails() {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Delivery Date</span>
-              <span className="font-medium text-blue-600">{formatDate(order.delivery_date)}</span>
+              <span className="font-medium text-primary-600">{formatDate(order.delivery_date)}</span>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function OrderDetails() {
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
           <div
-            className="bg-blue-500 h-3 rounded-full transition-all duration-500"
+            className="bg-primary-500 h-3 rounded-full transition-all duration-500"
             style={{ width: `${order.progress?.percentage || 0}%` }}
           />
         </div>
@@ -177,8 +177,8 @@ export default function OrderDetails() {
       </div>
 
       {/* Tracking link */}
-      <div className="card p-4 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-        <p className="text-xs text-blue-700 dark:text-blue-300 font-medium mb-1">Tracking Link</p>
+      <div className="card p-4 bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800">
+        <p className="text-xs text-primary-700 dark:text-primary-300 font-medium mb-1">Tracking Link</p>
         <div className="flex items-center gap-2">
           <input
             readOnly
@@ -253,7 +253,7 @@ export default function OrderDetails() {
                     <button
                       type="button"
                       onClick={() => fileRefs.current[item._id]?.click()}
-                      className="w-16 h-16 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center text-gray-400 hover:border-blue-400 hover:text-blue-400 transition-colors"
+                      className="w-16 h-16 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center text-gray-400 hover:border-primary-400 hover:text-primary-400 transition-colors"
                     >
                       <CameraIcon className="w-5 h-5" />
                     </button>

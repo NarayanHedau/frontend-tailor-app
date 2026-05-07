@@ -161,7 +161,7 @@ export default function PurchasesPage() {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="label mb-0">Supplier *</label>
-                <button type="button" onClick={() => setShowAddSupplier(!showAddSupplier)} className="text-[11px] text-blue-600 hover:text-blue-700 font-medium">
+                <button type="button" onClick={() => setShowAddSupplier(!showAddSupplier)} className="text-[11px] text-primary-600 hover:text-primary-700 font-medium">
                   {showAddSupplier ? 'Cancel' : '+ Add New'}
                 </button>
               </div>
@@ -171,7 +171,7 @@ export default function PurchasesPage() {
                   {suppliers.map((s) => <option key={s._id} value={s._id}>{s.name} — {s.company || s.phone}</option>)}
                 </select>
               ) : (
-                <div className="space-y-2 border border-blue-200 dark:border-blue-800 rounded-lg p-3 bg-blue-50/50 dark:bg-blue-900/10">
+                <div className="space-y-2 border border-primary-200 dark:border-primary-800 rounded-lg p-3 bg-primary-50/50 dark:bg-primary-900/10">
                   <input type="text" className="input text-sm" placeholder="Supplier name *" value={newSupplier.name} onChange={(e) => setNewSupplier({ ...newSupplier, name: e.target.value })} />
                   <input type="text" className="input text-sm" placeholder="Phone *" value={newSupplier.phone} onChange={(e) => setNewSupplier({ ...newSupplier, phone: e.target.value })} />
                   <input type="text" className="input text-sm" placeholder="Company name (optional)" value={newSupplier.company} onChange={(e) => setNewSupplier({ ...newSupplier, company: e.target.value })} />
@@ -198,7 +198,7 @@ export default function PurchasesPage() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="label mb-0">Items</label>
-              <button type="button" onClick={addItem} className="text-xs text-blue-600 hover:text-blue-700 font-medium">+ Add Item</button>
+              <button type="button" onClick={addItem} className="text-xs text-primary-600 hover:text-primary-700 font-medium">+ Add Item</button>
             </div>
             {items.map((item, idx) => (
               <div key={idx} className="grid grid-cols-12 gap-2 mb-3 items-end border border-gray-100 dark:border-gray-700/50 rounded-lg p-3 bg-gray-50/50 dark:bg-gray-900/30">
@@ -227,7 +227,7 @@ export default function PurchasesPage() {
                 </div>
                 <div className="col-span-3 md:col-span-2">
                   <label className="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Total</label>
-                  <div className="text-sm font-semibold text-blue-600 dark:text-blue-400 py-2">{formatCurrency(item.quantity * item.unit_price)}</div>
+                  <div className="text-sm font-semibold text-primary-600 dark:text-primary-400 py-2">{formatCurrency(item.quantity * item.unit_price)}</div>
                 </div>
               </div>
             ))}
@@ -239,9 +239,9 @@ export default function PurchasesPage() {
             <div><label className="label">Tax (₹)</label><input type="number" className="input" min="0" value={tax} onChange={(e) => setTax(Number(e.target.value))} /></div>
             <div><label className="label">Notes</label><input type="text" className="input" value={notes} onChange={(e) => setNotes(e.target.value)} /></div>
             <div className="flex items-end">
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg px-4 py-2 w-full text-center">
+              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg px-4 py-2 w-full text-center">
                 <p className="text-xs text-gray-500">Total</p>
-                <p className="text-lg font-bold text-blue-700 dark:text-blue-300">{formatCurrency(total)}</p>
+                <p className="text-lg font-bold text-primary-700 dark:text-primary-300">{formatCurrency(total)}</p>
               </div>
             </div>
           </div>
@@ -261,7 +261,7 @@ export default function PurchasesPage() {
 
       {/* View Bill Modal */}
       {viewPurchase && (
-        <div className="card p-5 border-blue-200 dark:border-blue-800">
+        <div className="card p-5 border-primary-200 dark:border-primary-800">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-gray-800 dark:text-white font-mono">{viewPurchase.bill_number}</h3>
             <button onClick={() => setViewPurchase(null)} className="text-gray-400 hover:text-gray-600 text-sm">Close</button>
@@ -317,7 +317,7 @@ export default function PurchasesPage() {
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {purchases.map((p) => (
                   <tr key={p._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td className="px-5 py-3 font-mono font-medium text-blue-600">{p.bill_number}</td>
+                    <td className="px-5 py-3 font-mono font-medium text-primary-600">{p.bill_number}</td>
                     <td className="px-5 py-3"><p className="font-medium text-gray-800 dark:text-white">{p.supplier_id?.name}</p><p className="text-xs text-gray-400">{p.supplier_id?.company}</p></td>
                     <td className="px-5 py-3 text-gray-500">{formatDate(p.purchase_date)}</td>
                     <td className="px-5 py-3 text-gray-600 dark:text-gray-300">{p.items?.length}</td>
@@ -326,7 +326,7 @@ export default function PurchasesPage() {
                     <td className="px-5 py-3"><span className={`text-xs px-2 py-1 rounded-md font-semibold ${statusColor[p.payment_status]}`}>{p.payment_status}</span></td>
                     <td className="px-5 py-3">
                       <div className="flex gap-1">
-                        <button onClick={() => setViewPurchase(p)} className="p-1.5 text-gray-400 hover:text-blue-600" title="View"><EyeIcon className="w-4 h-4" /></button>
+                        <button onClick={() => setViewPurchase(p)} className="p-1.5 text-gray-400 hover:text-primary-600" title="View"><EyeIcon className="w-4 h-4" /></button>
                         {p.balance_due > 0 && <button onClick={() => { setPayModal(p); setPayAmount(''); }} className="text-xs text-green-600 hover:text-green-700 font-medium px-1">Pay</button>}
                         <button onClick={() => handleDelete(p._id)} className="p-1.5 text-gray-400 hover:text-red-600"><TrashIcon className="w-4 h-4" /></button>
                       </div>

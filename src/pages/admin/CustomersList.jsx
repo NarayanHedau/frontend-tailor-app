@@ -101,20 +101,20 @@ export default function CustomersList() {
                     <td className="px-6 py-3">
                       <Link
                         to={`/admin/customers/${c._id}`}
-                        className="font-medium text-gray-800 dark:text-white hover:text-blue-600"
+                        className="font-medium text-gray-800 dark:text-white hover:text-primary-600"
                       >
                         {c.name}
                       </Link>
                     </td>
                     <td className="px-6 py-3">
-                      <a href={`tel:${c.phone}`} className="flex items-center gap-1 text-blue-600 hover:text-blue-700">
+                      <a href={`tel:${c.phone}`} className="flex items-center gap-1 text-primary-600 hover:text-primary-700">
                         <PhoneIcon className="w-3.5 h-3.5" />
                         {c.phone}
                       </a>
                     </td>
                     <td className="px-6 py-3 text-gray-500">{c.email || '—'}</td>
                     <td className="px-6 py-3">
-                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold">
+                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold">
                         {c.orderCount || 0}
                       </span>
                     </td>
@@ -128,7 +128,7 @@ export default function CustomersList() {
                       <div className="flex items-center gap-2">
                         <Link
                           to={`/admin/customers/${c._id}`}
-                          className="text-blue-600 hover:text-blue-700 font-medium text-xs"
+                          className="text-primary-600 hover:text-primary-700 font-medium text-xs"
                         >
                           View
                         </Link>

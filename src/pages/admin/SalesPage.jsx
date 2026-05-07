@@ -149,7 +149,7 @@ export default function SalesPage() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="label mb-0">Items</label>
-              <button type="button" onClick={addItem} className="text-xs text-blue-600 hover:text-blue-700 font-medium">+ Add Item</button>
+              <button type="button" onClick={addItem} className="text-xs text-primary-600 hover:text-primary-700 font-medium">+ Add Item</button>
             </div>
             {items.map((item, idx) => (
               <div key={idx} className="grid grid-cols-12 gap-2 mb-3 items-end border border-gray-100 dark:border-gray-700/50 rounded-lg p-3 bg-gray-50/50 dark:bg-gray-900/30">
@@ -178,7 +178,7 @@ export default function SalesPage() {
                 </div>
                 <div className="col-span-3 md:col-span-2">
                   <label className="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Total</label>
-                  <div className="text-sm font-semibold text-blue-600 dark:text-blue-400 py-2">{formatCurrency(item.quantity * item.unit_price)}</div>
+                  <div className="text-sm font-semibold text-primary-600 dark:text-primary-400 py-2">{formatCurrency(item.quantity * item.unit_price)}</div>
                 </div>
               </div>
             ))}
@@ -189,9 +189,9 @@ export default function SalesPage() {
             <div><label className="label">Tax (₹)</label><input type="number" className="input" min="0" value={tax} onChange={(e) => setTax(Number(e.target.value))} /></div>
             <div><label className="label">Amount Received (₹)</label><input type="number" className="input no-spinner" min="0" placeholder="0" value={amountPaid} onChange={(e) => setAmountPaid(e.target.value)} /></div>
             <div className="flex items-end">
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg px-4 py-2 w-full text-center">
+              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg px-4 py-2 w-full text-center">
                 <p className="text-xs text-gray-500">Total</p>
-                <p className="text-lg font-bold text-blue-700 dark:text-blue-300">{formatCurrency(total)}</p>
+                <p className="text-lg font-bold text-primary-700 dark:text-primary-300">{formatCurrency(total)}</p>
               </div>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function SalesPage() {
 
       {/* View Bill */}
       {viewSale && (
-        <div className="card p-5 border-blue-200 dark:border-blue-800">
+        <div className="card p-5 border-primary-200 dark:border-primary-800">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-gray-800 dark:text-white font-mono">{viewSale.bill_number}</h3>
             <button onClick={() => setViewSale(null)} className="text-gray-400 hover:text-gray-600 text-sm">Close</button>
@@ -274,16 +274,16 @@ export default function SalesPage() {
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {sales.map((s) => (
                   <tr key={s._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td className="px-5 py-3 font-mono font-medium text-blue-600">{s.bill_number}</td>
+                    <td className="px-5 py-3 font-mono font-medium text-primary-600">{s.bill_number}</td>
                     <td className="px-5 py-3"><p className="font-medium text-gray-800 dark:text-white">{s.customer_name}</p><p className="text-xs text-gray-400">{s.customer_phone}</p></td>
-                    <td className="px-5 py-3"><span className={`text-xs px-2 py-1 rounded-md font-medium ${s.sale_type === 'WHOLESALE' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'}`}>{s.sale_type}</span></td>
+                    <td className="px-5 py-3"><span className={`text-xs px-2 py-1 rounded-md font-medium ${s.sale_type === 'WHOLESALE' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' : 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'}`}>{s.sale_type}</span></td>
                     <td className="px-5 py-3 text-gray-500">{formatDate(s.sale_date)}</td>
                     <td className="px-5 py-3 font-medium">{formatCurrency(s.total_amount)}</td>
                     <td className="px-5 py-3 text-green-600">{formatCurrency(s.amount_paid)}</td>
                     <td className="px-5 py-3"><span className={`text-xs px-2 py-1 rounded-md font-semibold ${statusColor[s.payment_status]}`}>{s.payment_status}</span></td>
                     <td className="px-5 py-3">
                       <div className="flex gap-1">
-                        <button onClick={() => setViewSale(s)} className="p-1.5 text-gray-400 hover:text-blue-600"><EyeIcon className="w-4 h-4" /></button>
+                        <button onClick={() => setViewSale(s)} className="p-1.5 text-gray-400 hover:text-primary-600"><EyeIcon className="w-4 h-4" /></button>
                         {s.balance_due > 0 && <button onClick={() => { setPayModal(s); setPayAmount(''); }} className="text-xs text-green-600 hover:text-green-700 font-medium px-1">Pay</button>}
                         <button onClick={() => handleDelete(s._id)} className="p-1.5 text-gray-400 hover:text-red-600"><TrashIcon className="w-4 h-4" /></button>
                       </div>

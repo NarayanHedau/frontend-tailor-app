@@ -146,10 +146,10 @@ export default function BusinessOverview() {
         </div>
         <div className="card p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><CubeIcon className="w-5 h-5 text-blue-600" /></div>
+            <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center"><CubeIcon className="w-5 h-5 text-primary-600" /></div>
             <div>
               <p className="text-xs text-gray-500">Stock Value</p>
-              <p className="text-lg font-bold text-blue-600">{formatCurrency(totalSpent)}</p>
+              <p className="text-lg font-bold text-primary-600">{formatCurrency(totalSpent)}</p>
               <p className="text-[10px] text-gray-400">{lowStockProducts.length} low stock items</p>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function BusinessOverview() {
                 <button
                   key={q.label}
                   onClick={() => applyQuickRange(q.days)}
-                  className="px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                  className="px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
                 >
                   {q.label}
                 </button>
@@ -202,7 +202,7 @@ export default function BusinessOverview() {
         {/* Area Chart */}
         {chartLoading ? (
           <div className="card p-5 flex items-center justify-center h-[380px]">
-            <div className="w-7 h-7 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+            <div className="w-7 h-7 border-[3px] border-primary-200 border-t-primary-600 rounded-full animate-spin" />
           </div>
         ) : (
           <div className="card p-5">

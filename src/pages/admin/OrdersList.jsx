@@ -97,7 +97,7 @@ export default function OrdersList() {
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                   {orders.map((order) => (
                     <tr key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                      <td className="px-5 py-3 font-mono text-blue-600 font-medium text-xs">
+                      <td className="px-5 py-3 font-mono text-primary-600 font-medium text-xs">
                         {order.order_number}
                       </td>
                       <td className="px-5 py-3">
@@ -113,7 +113,7 @@ export default function OrdersList() {
                         <div className="flex items-center gap-2">
                           <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                             <div
-                              className="bg-blue-500 h-1.5 rounded-full transition-all"
+                              className="bg-primary-500 h-1.5 rounded-full transition-all"
                               style={{ width: `${order.progress?.percentage || 0}%` }}
                             />
                           </div>
@@ -135,7 +135,7 @@ export default function OrdersList() {
                         <div className="flex items-center gap-2">
                           <Link
                             to={`/admin/orders/${order._id}`}
-                            className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                             title="View order"
                           >
                             <EyeIcon className="w-4 h-4" />
@@ -155,7 +155,7 @@ export default function OrdersList() {
                     <tr>
                       <td colSpan={8} className="px-5 py-10 text-center text-gray-400">
                         No orders found.{' '}
-                        <Link to="/admin/orders/new" className="text-blue-600">Create one</Link>
+                        <Link to="/admin/orders/new" className="text-primary-600">Create one</Link>
                       </td>
                     </tr>
                   )}
@@ -174,7 +174,7 @@ export default function OrdersList() {
                       onClick={() => fetchOrders(p)}
                       className={`w-8 h-8 rounded-lg text-xs font-medium transition-colors ${
                         p === pagination.page
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-primary-600 text-white'
                           : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
                       }`}
                     >

@@ -140,7 +140,7 @@ export default function CustomerDetail() {
             Contact Info
           </h3>
           <div className="space-y-2">
-            <a href={`tel:${customer.phone}`} className="flex items-center gap-2 text-blue-600 hover:text-blue-700">
+            <a href={`tel:${customer.phone}`} className="flex items-center gap-2 text-primary-600 hover:text-primary-700">
               <PhoneIcon className="w-4 h-4" /> {customer.phone}
             </a>
             {customer.email && (
@@ -161,8 +161,8 @@ export default function CustomerDetail() {
             Summary
           </h3>
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.totalOrders || 0}</p>
+            <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 text-center">
+              <p className="text-2xl font-bold text-primary-700 dark:text-primary-300">{stats.totalOrders || 0}</p>
               <p className="text-xs text-gray-500">Total Orders</p>
             </div>
             <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 text-center">
@@ -267,13 +267,13 @@ export default function CustomerDetail() {
             <div key={profile._id} className="p-5">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-xs font-semibold">
+                  <span className="px-2.5 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-md text-xs font-semibold">
                     {profile.label}
                   </span>
                   <span className="text-xs text-gray-400">Updated {formatDate(profile.updatedAt)}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <button onClick={() => handleEditProfile(profile)} className="p-1.5 text-gray-400 hover:text-blue-600 rounded">
+                  <button onClick={() => handleEditProfile(profile)} className="p-1.5 text-gray-400 hover:text-primary-600 rounded">
                     <PencilIcon className="w-4 h-4" />
                   </button>
                   <button onClick={() => handleDeleteProfile(profile._id)} className="p-1.5 text-gray-400 hover:text-red-600 rounded">
@@ -319,7 +319,7 @@ export default function CustomerDetail() {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {orders.map((order) => (
                 <tr key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-6 py-3 font-mono text-blue-600 font-medium">{order.order_number}</td>
+                  <td className="px-6 py-3 font-mono text-primary-600 font-medium">{order.order_number}</td>
                   <td className="px-6 py-3 text-gray-500">{formatDate(order.order_date)}</td>
                   <td className="px-6 py-3 text-gray-600 dark:text-gray-300">
                     {order.items?.map((i) => i.type).join(', ')}
@@ -327,7 +327,7 @@ export default function CustomerDetail() {
                   <td className="px-6 py-3 font-medium">{formatCurrency(order.invoice?.total_amount || 0)}</td>
                   <td className="px-6 py-3"><StatusBadge status={order.status} /></td>
                   <td className="px-6 py-3">
-                    <Link to={`/admin/orders/${order._id}`} className="text-blue-600 hover:text-blue-700 font-medium">
+                    <Link to={`/admin/orders/${order._id}`} className="text-primary-600 hover:text-primary-700 font-medium">
                       View
                     </Link>
                   </td>

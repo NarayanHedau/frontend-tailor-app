@@ -170,7 +170,7 @@ export default function CreateOrder() {
             type="button"
             onClick={() => setIsNewCustomer(false)}
             className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
-              !isNewCustomer ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300'
+              !isNewCustomer ? 'bg-primary-600 text-white border-primary-600' : 'border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300'
             }`}
           >
             Existing Customer
@@ -179,7 +179,7 @@ export default function CreateOrder() {
             type="button"
             onClick={() => setIsNewCustomer(true)}
             className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
-              isNewCustomer ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300'
+              isNewCustomer ? 'bg-primary-600 text-white border-primary-600' : 'border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300'
             }`}
           >
             New Customer
@@ -217,15 +217,15 @@ export default function CreateOrder() {
               </div>
             )}
             {selectedCustomer && (
-              <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex items-center justify-between">
+              <div className="mt-3 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-blue-800 dark:text-blue-200">{selectedCustomer.name}</p>
-                  <p className="text-sm text-blue-600 dark:text-blue-300">{selectedCustomer.phone}</p>
+                  <p className="font-medium text-primary-800 dark:text-primary-200">{selectedCustomer.name}</p>
+                  <p className="text-sm text-primary-600 dark:text-primary-300">{selectedCustomer.phone}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => { setSelectedCustomer(null); setCustomerSearch(''); setCustomerProfiles([]); }}
-                  className="text-blue-400 hover:text-blue-600"
+                  className="text-primary-400 hover:text-primary-600"
                 >
                   <TrashIcon className="w-4 h-4" />
                 </button>
@@ -367,7 +367,7 @@ export default function CreateOrder() {
                 <button
                   type="button"
                   onClick={() => toggleMeasurements(idx)}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
                 >
                   {expandedMeasurements[idx] ? '▲ Hide' : '▼ Add'} Measurements
                 </button>
@@ -428,9 +428,9 @@ export default function CreateOrder() {
 
         {/* Total */}
         <div className="mt-4 flex justify-end">
-          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg px-5 py-3">
+          <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg px-5 py-3">
             <span className="text-sm text-gray-500 dark:text-gray-400">Estimated Total: </span>
-            <span className="text-xl font-bold text-blue-700 dark:text-blue-300">
+            <span className="text-xl font-bold text-primary-700 dark:text-primary-300">
               ₹{totalAmount.toLocaleString('en-IN')}
             </span>
           </div>

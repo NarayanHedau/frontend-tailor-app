@@ -2,10 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Theme palettes (CSS variables) ─────────────────────────────────────────
+ * Switching the theme class on <html> swaps every `bg-primary-*`,
+ * `text-primary-*`, `ring-primary-*`, `bg-accent`, etc. instantly.
+ * Values are RGB triplets so Tailwind's `<alpha-value>` works with them.
+ *
+ * NOTE: These rules are deliberately OUTSIDE @layer base. Tailwind's content
+ * scanner doesn't see the `theme-*` class names (they're built dynamically in
+ * JS as `theme-${id}`), so when these rules live in @layer base, Tailwind /
+ * cssnano can drop them as "unused". Keeping them at root level ensures they
+ * always ship to the bundle.
+ * ───────────────────────────────────────────────────────────────────────── */
+:root,
+html.theme-default {
+  /* Default — Blue (original) */
+  --color-primary-50:  239 246 255;
+  --color-primary-100: 219 234 254;
+  --color-primary-200: 191 219 254;
+  --color-primary-300: 147 197 253;
+  --color-primary-400: 96 165 250;
+  --color-primary-500: 59 130 246;
+  --color-primary-600: 37 99 235;
+  --color-primary-700: 29 78 216;
+  --color-primary-800: 30 64 175;
+  --color-primary-900: 30 58 138;
+  --color-primary-950: 23 37 84;
+  --color-accent:      212 175 55;
+  --color-accent-soft: 245 230 174;
+}
+
+html.theme-forest {
+  /* Forest Green + Gold (TailorAtlas-inspired premium) */
+  --color-primary-50:  236 245 240;
+  --color-primary-100: 209 232 220;
+  --color-primary-200: 167 213 191;
+  --color-primary-300: 113 187 153;
+  --color-primary-400: 76 158 121;
+  --color-primary-500: 51 130 95;
+  --color-primary-600: 39 102 75;
+  --color-primary-700: 32 80 59;
+  --color-primary-800: 26 64 47;
+  --color-primary-900: 20 49 36;
+  --color-primary-950: 10 28 21;
+  --color-accent:      212 175 55;
+  --color-accent-soft: 245 230 174;
+}
+
+html.theme-maroon {
+  /* Maroon / Burgundy + Beige (royal Indian tailor) */
+  --color-primary-50:  253 235 235;
+  --color-primary-100: 251 215 215;
+  --color-primary-200: 247 175 175;
+  --color-primary-300: 240 130 130;
+  --color-primary-400: 226 88 88;
+  --color-primary-500: 200 50 50;
+  --color-primary-600: 161 32 32;
+  --color-primary-700: 124 25 25;
+  --color-primary-800: 88 22 22;
+  --color-primary-900: 64 18 18;
+  --color-primary-950: 38 11 11;
+  --color-accent:      217 164 80;
+  --color-accent-soft: 245 220 180;
+}
+
+html.theme-navy {
+  /* Navy + Gold (modern luxury) */
+  --color-primary-50:  234 240 251;
+  --color-primary-100: 211 224 247;
+  --color-primary-200: 167 192 239;
+  --color-primary-300: 122 159 226;
+  --color-primary-400: 71 119 200;
+  --color-primary-500: 36 84 168;
+  --color-primary-600: 25 64 138;
+  --color-primary-700: 21 51 110;
+  --color-primary-800: 17 39 84;
+  --color-primary-900: 13 28 60;
+  --color-primary-950: 7 16 36;
+  --color-accent:      212 175 55;
+  --color-accent-soft: 245 230 174;
+}
+
 @layer base {
   * { @apply box-border; }
   body { @apply bg-gray-50 text-gray-900 font-sans antialiased; }
   html.dark body { @apply bg-gray-950 text-gray-100; }
+  h1, h2, .font-display { font-family: 'Playfair Display', Georgia, serif; }
 }
 
 @layer components {
@@ -13,7 +94,7 @@
     @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-primary {
-    @apply btn bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
   }
   .btn-secondary {
     @apply btn bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-400 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600;
@@ -36,7 +117,7 @@
   }
 
   .input {
-    @apply w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white dark:bg-gray-900/50 dark:border-gray-600 dark:text-white dark:placeholder-gray-500;
+    @apply w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors bg-white dark:bg-gray-900/50 dark:border-gray-600 dark:text-white dark:placeholder-gray-500;
   }
 
   .label {
@@ -48,7 +129,7 @@
   }
   .badge-green { @apply badge bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200; }
   .badge-yellow { @apply badge bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200; }
-  .badge-blue { @apply badge bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200; }
+  .badge-blue { @apply badge bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200; }
   .badge-red { @apply badge bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200; }
   .badge-gray { @apply badge bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200; }
   .badge-purple { @apply badge bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200; }

@@ -33,7 +33,7 @@ function OrderRow({ order, dateField, dateLabel }) {
   return (
     <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
       <td className="px-5 py-3">
-        <Link to={`/admin/orders/${order._id}`} className="font-mono text-blue-600 font-medium hover:text-blue-700">
+        <Link to={`/admin/orders/${order._id}`} className="font-mono text-primary-600 font-medium hover:text-primary-700">
           {order.order_number}
         </Link>
       </td>
@@ -48,7 +48,7 @@ function OrderRow({ order, dateField, dateLabel }) {
         {order.progress?.completed}/{order.progress?.total} ready
       </td>
       <td className="px-5 py-3">
-        <Link to={`/admin/orders/${order._id}`} className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+        <Link to={`/admin/orders/${order._id}`} className="text-primary-600 hover:text-primary-700 font-medium text-sm">
           View
         </Link>
       </td>
@@ -127,7 +127,7 @@ export default function CalendarPage() {
       {/* Header */}
       <div>
         <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-          <CalendarDaysIcon className="w-6 h-6 text-blue-600" />
+          <CalendarDaysIcon className="w-6 h-6 text-primary-600" />
           Deadlines & Calendar
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -161,11 +161,11 @@ export default function CalendarPage() {
         </div>
         <div className="card p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-              <TruckIcon className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+              <TruckIcon className="w-5 h-5 text-primary-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{summary.upcomingDeliveriesCount || 0}</p>
+              <p className="text-2xl font-bold text-primary-700 dark:text-primary-400">{summary.upcomingDeliveriesCount || 0}</p>
               <p className="text-xs text-gray-500">Upcoming Deliveries (14 days)</p>
             </div>
           </div>
@@ -180,7 +180,7 @@ export default function CalendarPage() {
             onClick={() => setTab(t.key)}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               tab === t.key
-                ? 'border-blue-600 text-blue-600'
+                ? 'border-primary-600 text-primary-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -217,7 +217,7 @@ export default function CalendarPage() {
           <SectionTable
             title="Upcoming Deliveries"
             icon={TruckIcon}
-            iconColor="text-blue-500"
+            iconColor="text-primary-500"
             orders={upcomingDeliveries}
             dateField="delivery_date"
             dateLabel="Delivery Date"

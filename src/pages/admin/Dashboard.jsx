@@ -191,7 +191,7 @@ export default function Dashboard() {
                 <button
                   key={q.label}
                   onClick={() => applyQuickRange(q.days)}
-                  className="px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                  className="px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
                 >
                   {q.label}
                 </button>
@@ -236,10 +236,10 @@ export default function Dashboard() {
         {chartLoading ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="card p-5 flex items-center justify-center h-[360px]">
-              <div className="w-7 h-7 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+              <div className="w-7 h-7 border-[3px] border-primary-200 border-t-primary-600 rounded-full animate-spin" />
             </div>
             <div className="card p-5 flex items-center justify-center h-[360px]">
-              <div className="w-7 h-7 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+              <div className="w-7 h-7 border-[3px] border-primary-200 border-t-primary-600 rounded-full animate-spin" />
             </div>
           </div>
         ) : (
@@ -528,10 +528,10 @@ export default function Dashboard() {
             <div className="card p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <CalendarDaysIcon className="w-5 h-5 text-blue-500" />
+                  <CalendarDaysIcon className="w-5 h-5 text-primary-500" />
                   <h3 className="font-semibold text-gray-800 dark:text-white">Upcoming Deadlines</h3>
                 </div>
-                <Link to="/admin/calendar" className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                <Link to="/admin/calendar" className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
                   Calendar <ArrowRightIcon className="w-3 h-3" />
                 </Link>
               </div>
@@ -555,9 +555,9 @@ export default function Dashboard() {
                   <Link
                     key={order._id}
                     to={`/admin/orders/${order._id}`}
-                    className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/10 rounded-lg px-3 py-2 hover:shadow-sm transition-shadow"
+                    className="flex items-center gap-2 bg-primary-50 dark:bg-primary-900/10 rounded-lg px-3 py-2 hover:shadow-sm transition-shadow"
                   >
-                    <CalendarDaysIcon className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                    <CalendarDaysIcon className="w-4 h-4 text-primary-500 flex-shrink-0" />
                     <div className="min-w-0">
                       <p className="text-xs font-medium text-gray-800 dark:text-gray-200 truncate">
                         Delivery: {order.customer_id?.name}
@@ -578,7 +578,7 @@ export default function Dashboard() {
           <h3 className="font-semibold text-gray-800 dark:text-white">Recent Orders</h3>
           <Link
             to="/admin/orders"
-            className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+            className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1"
           >
             View all <ArrowRightIcon className="w-4 h-4" />
           </Link>
@@ -597,7 +597,7 @@ export default function Dashboard() {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {(stats?.recentOrders ?? []).map((order) => (
                 <tr key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-6 py-3 font-mono text-blue-600 font-medium">
+                  <td className="px-6 py-3 font-mono text-primary-600 font-medium">
                     {order.order_number}
                   </td>
                   <td className="px-6 py-3">
@@ -613,7 +613,7 @@ export default function Dashboard() {
                   <td className="px-6 py-3">
                     <Link
                       to={`/admin/orders/${order._id}`}
-                      className="text-blue-600 hover:text-blue-700 font-medium"
+                      className="text-primary-600 hover:text-primary-700 font-medium"
                     >
                       View
                     </Link>
@@ -623,7 +623,7 @@ export default function Dashboard() {
               {(stats?.recentOrders ?? []).length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-8 text-center text-gray-400">
-                    No orders yet. <Link to="/admin/orders/new" className="text-blue-600">Create your first order</Link>
+                    No orders yet. <Link to="/admin/orders/new" className="text-primary-600">Create your first order</Link>
                   </td>
                 </tr>
               )}

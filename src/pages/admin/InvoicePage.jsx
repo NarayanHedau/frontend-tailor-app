@@ -185,11 +185,11 @@ export default function InvoicePage() {
       {invoice && (
         <div className="card overflow-hidden">
           {/* Invoice header */}
-          <div className="bg-blue-600 px-6 py-5 text-white">
+          <div className="bg-primary-600 px-6 py-5 text-white">
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="text-xl font-bold">INVOICE</h3>
-                <p className="text-blue-200 text-sm mt-0.5">#{invoice.invoice_number}</p>
+                <p className="text-primary-200 text-sm mt-0.5">#{invoice.invoice_number}</p>
               </div>
               <StatusBadge status={invoice.payment_status} />
             </div>

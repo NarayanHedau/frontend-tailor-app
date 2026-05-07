@@ -174,7 +174,7 @@ export default function InventoryPage() {
                       <td className="px-5 py-3"><span className={`text-xs font-semibold ${margin > 0 ? 'text-green-600' : 'text-gray-400'}`}>{margin}%</span></td>
                       <td className="px-5 py-3">
                         <div className="flex gap-1">
-                          <button onClick={() => handleEdit(p)} className="p-1.5 text-gray-400 hover:text-blue-600"><PencilIcon className="w-4 h-4" /></button>
+                          <button onClick={() => handleEdit(p)} className="p-1.5 text-gray-400 hover:text-primary-600"><PencilIcon className="w-4 h-4" /></button>
                           <button onClick={() => handleDelete(p._id, p.name)} className="p-1.5 text-gray-400 hover:text-red-600"><TrashIcon className="w-4 h-4" /></button>
                         </div>
                       </td>

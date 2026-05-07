@@ -31,7 +31,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-indigo-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -39,7 +39,7 @@ export default function LoginPage() {
             <ScissorsIcon className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white">Tailor Tracker</h1>
-          <p className="text-blue-200 mt-1">Admin Panel Sign In</p>
+          <p className="text-primary-200 mt-1">Admin Panel Sign In</p>
         </div>
 
         {/* Card */}

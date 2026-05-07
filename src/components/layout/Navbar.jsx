@@ -1,6 +1,7 @@
 import { Bars3Icon, MoonIcon, SunIcon } from '@heroicons/react/24/outline';
 import { useThemeStore } from '../../store/themeStore';
 import { useLocation } from 'react-router-dom';
+import ThemeSwitcher from '../ui/ThemeSwitcher';
 
 const pageTitles = {
   '/admin/dashboard': 'Dashboard',
@@ -36,6 +37,7 @@ export default function Navbar({ onMenuClick }) {
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">{title}</h2>
       </div>
       <div className="flex items-center gap-2">
+        <ThemeSwitcher />
         <button
           onClick={toggleDarkMode}
           className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

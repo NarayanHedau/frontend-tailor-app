@@ -16,6 +16,7 @@ import SalesPage from './pages/admin/SalesPage';
 import BusinessOverview from './pages/admin/BusinessOverview';
 import TenantsPage from './pages/superadmin/TenantsPage';
 import TrackingPage from './pages/customer/TrackingPage';
+import InvoiceViewPage from './pages/customer/InvoiceViewPage';
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuthStore();
@@ -43,6 +44,8 @@ export default function App() {
     <Routes>
       {/* Public customer tracking */}
       <Route path="/track/:trackingId" element={<TrackingPage />} />
+      <Route path="/stitch-invoice/track/public/:trackingId" element={<TrackingPage />} />
+      <Route path="/stitch-invoice/view/public/:trackingId" element={<InvoiceViewPage />} />
 
       {/* Admin login */}
       <Route path="/admin/login" element={<LoginPage />} />

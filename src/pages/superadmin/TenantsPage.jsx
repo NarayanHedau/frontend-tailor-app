@@ -246,7 +246,7 @@ export default function TenantsPage() {
                       </button>
                       <button
                         onClick={() => handleResetPassword(t)}
-                        className="p-1.5 rounded text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="p-1.5 rounded text-primary-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                         title="Reset password"
                       >
                         <KeyIcon className="w-4 h-4" />

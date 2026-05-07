@@ -17,13 +17,13 @@ import { useThemeStore } from '../../store/themeStore';
 
 const STATUS_CONFIG = {
   PENDING: { label: 'Pending', color: 'text-yellow-600 bg-yellow-50 border-yellow-200', icon: ClockIcon, dot: 'bg-yellow-400' },
-  STITCHING: { label: 'Stitching', color: 'text-blue-600 bg-blue-50 border-blue-200', icon: WrenchScrewdriverIcon, dot: 'bg-blue-400' },
+  STITCHING: { label: 'Stitching', color: 'text-primary-600 bg-primary-50 border-primary-200', icon: WrenchScrewdriverIcon, dot: 'bg-primary-400' },
   READY: { label: 'Ready', color: 'text-green-600 bg-green-50 border-green-200', icon: CheckCircleIcon, dot: 'bg-green-400' },
 };
 
 const ORDER_STATUS_CONFIG = {
   PENDING: { label: 'Order Received', color: 'bg-yellow-100 text-yellow-800' },
-  IN_PROGRESS: { label: 'In Progress', color: 'bg-blue-100 text-blue-800' },
+  IN_PROGRESS: { label: 'In Progress', color: 'bg-primary-100 text-primary-800' },
   COMPLETED: { label: 'Ready for Pickup', color: 'bg-green-100 text-green-800' },
   DELIVERED: { label: 'Delivered', color: 'bg-purple-100 text-purple-800' },
   CANCELLED: { label: 'Cancelled', color: 'bg-red-100 text-red-800' },
@@ -65,9 +65,9 @@ export default function TrackingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto" />
+          <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-gray-500">Loading your order...</p>
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function TrackingPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-950 flex items-center justify-center p-4">
         <div className="text-center max-w-sm">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <ScissorsIcon className="w-8 h-8 text-red-400" />
@@ -94,16 +94,16 @@ export default function TrackingPage() {
   const totalItems = data.items.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
+    <div className="min-h-screen bg-gradient-to-b from-primary-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
       {/* Header */}
-      <div className="bg-blue-600 text-white px-4 py-5">
+      <div className="bg-primary-600 text-white px-4 py-5">
         <div className="max-w-lg mx-auto">
           <div className="flex items-center gap-2 mb-1">
             <ScissorsIcon className="w-5 h-5" />
-            <span className="text-sm font-medium text-blue-200">Tailor Tracker</span>
+            <span className="text-sm font-medium text-primary-200">Tailor Tracker</span>
           </div>
           <h1 className="text-2xl font-bold">{customer?.name}</h1>
-          <p className="text-blue-200 text-sm mt-0.5 font-mono">{data.order_number}</p>
+          <p className="text-primary-200 text-sm mt-0.5 font-mono">{data.order_number}</p>
           <span className={`inline-flex items-center mt-2 px-3 py-1 rounded-full text-xs font-semibold ${orderStatus.color}`}>
             {orderStatus.label}
           </span>
@@ -121,7 +121,7 @@ export default function TrackingPage() {
               { label: 'Delivery', value: formatDate(data.delivery_date) },
             ].map(({ label, value }) => (
               <div key={label} className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3">
-                <CalendarDaysIcon className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+                <CalendarDaysIcon className="w-4 h-4 text-primary-400 mx-auto mb-1" />
                 <p className="text-xs text-gray-400">{label}</p>
                 <p className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-0.5">{value}</p>
               </div>
@@ -139,7 +139,7 @@ export default function TrackingPage() {
           </div>
           <div className="relative w-full bg-gray-100 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-700 ease-out"
+              className="h-full bg-gradient-to-r from-primary-500 to-primary-600 rounded-full transition-all duration-700 ease-out"
               style={{ width: `${data.progress?.percentage || 0}%` }}
             />
             <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">
@@ -286,9 +286,9 @@ export default function TrackingPage() {
           {customer?.phone && (
             <a
               href={`tel:${customer.phone}`}
-              className="flex flex-col items-center gap-1.5 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-4 text-gray-600 dark:text-gray-300 hover:bg-blue-50 transition-colors"
+              className="flex flex-col items-center gap-1.5 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-4 text-gray-600 dark:text-gray-300 hover:bg-primary-50 transition-colors"
             >
-              <PhoneIcon className="w-6 h-6 text-blue-600" />
+              <PhoneIcon className="w-6 h-6 text-primary-600" />
               <span className="text-xs font-medium">Call Shop</span>
             </a>
           )}
