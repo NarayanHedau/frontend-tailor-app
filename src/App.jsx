@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import AdminLayout from './components/layout/AdminLayout';
 import LoginPage from './pages/admin/LoginPage';
+import ForgotPasswordPage from './pages/admin/ForgotPasswordPage';
+import ResetPasswordPage from './pages/admin/ResetPasswordPage';
 import Dashboard from './pages/admin/Dashboard';
 import CreateOrder from './pages/admin/CreateOrder';
 import OrdersList from './pages/admin/OrdersList';
@@ -15,6 +17,7 @@ import PurchasesPage from './pages/admin/PurchasesPage';
 import SalesPage from './pages/admin/SalesPage';
 import BusinessOverview from './pages/admin/BusinessOverview';
 import TenantsPage from './pages/superadmin/TenantsPage';
+import AgentsPage from './pages/superadmin/AgentsPage';
 import TrackingPage from './pages/customer/TrackingPage';
 import InvoiceViewPage from './pages/customer/InvoiceViewPage';
 
@@ -23,7 +26,10 @@ const ProtectedRoute = ({ children }) => {
   return token ? children : <Navigate to="/admin/login" replace />;
 };
 
-const landingPathForRole = (role) => (role === 'superadmin' ? '/admin/tenants' : '/admin/dashboard');
+const landingPathForRole = (role) => {
+  if (role === 'superadmin' || role === 'agent') return '/admin/tenants';
+  return '/admin/dashboard';
+};
 
 const RoleRoute = ({ allow, children }) => {
   const { user } = useAuthStore();
@@ -47,8 +53,10 @@ export default function App() {
       <Route path="/stitch-invoice/track/public/:trackingId" element={<TrackingPage />} />
       <Route path="/stitch-invoice/view/public/:trackingId" element={<InvoiceViewPage />} />
 
-      {/* Admin login */}
+      {/* Admin login + public password reset flow */}
       <Route path="/admin/login" element={<LoginPage />} />
+      <Route path="/admin/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/admin/reset-password" element={<ResetPasswordPage />} />
 
       {/* Protected admin routes */}
       <Route
@@ -61,10 +69,13 @@ export default function App() {
       >
         <Route index element={<RoleIndexRedirect />} />
 
-        {/* Superadmin-only */}
-        <Route path="tenants" element={<RoleRoute allow={['superadmin']}><TenantsPage /></RoleRoute>} />
+        {/* SuperAdmin & Agent — tenant management */}
+        <Route path="tenants" element={<RoleRoute allow={['superadmin', 'agent']}><TenantsPage /></RoleRoute>} />
 
-        {/* Admin-only (tailor-shop operations) */}
+        {/* SuperAdmin only — agent management */}
+        <Route path="agents" element={<RoleRoute allow={['superadmin']}><AgentsPage /></RoleRoute>} />
+
+        {/* Admin/Tailor only — tailor-shop operations */}
         <Route path="dashboard" element={<RoleRoute allow={['admin', 'tailor']}><Dashboard /></RoleRoute>} />
         <Route path="orders" element={<RoleRoute allow={['admin', 'tailor']}><OrdersList /></RoleRoute>} />
         <Route path="orders/new" element={<RoleRoute allow={['admin', 'tailor']}><CreateOrder /></RoleRoute>} />

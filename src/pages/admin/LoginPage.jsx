@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { useThemeStore } from '../../store/themeStore';
 import { ScissorsIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 
-const landingPathForRole = (role) => (role === 'superadmin' ? '/admin/tenants' : '/admin/dashboard');
+const landingPathForRole = (role) => {
+  if (role === 'superadmin' || role === 'agent') return '/admin/tenants';
+  return '/admin/dashboard';
+};
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -59,7 +62,15 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="label">Password</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="label !mb-0">Password</label>
+                <Link
+                  to="/admin/forgot-password"
+                  className="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}

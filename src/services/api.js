@@ -35,6 +35,8 @@ export const authAPI = {
   login: (data) => api.post('/auth/login', data),
   getMe: () => api.get('/auth/me'),
   changePassword: (data) => api.put('/auth/change-password', data),
+  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+  resetPassword: (data) => api.post('/auth/reset-password', data),
 };
 
 // ─── Customers ─────────────────────────────────────────────────────────────
@@ -117,7 +119,7 @@ export const saleAPI = {
   getStats: () => api.get('/sales/stats'),
 };
 
-// ─── Tenants (superadmin only) ────────────────────────────────────────────
+// ─── Tenants (superadmin + agent) ─────────────────────────────────────────
 export const tenantAPI = {
   getAll: (params) => api.get('/tenants', { params }),
   getById: (id) => api.get(`/tenants/${id}`),
@@ -126,6 +128,19 @@ export const tenantAPI = {
   delete: (id) => api.delete(`/tenants/${id}`),
   toggleStatus: (id, isActive) => api.patch(`/tenants/${id}/status`, { isActive }),
   resetPassword: (id) => api.post(`/tenants/${id}/reset-password`),
+  getMessagingUsage: (id, params) => api.get(`/tenants/${id}/messaging-usage`, { params }),
+  resetWhatsAppUsage: (id) => api.post(`/tenants/${id}/reset-whatsapp-usage`),
+};
+
+// ─── Agents (superadmin only) ─────────────────────────────────────────────
+export const agentAPI = {
+  getAll: (params) => api.get('/agents', { params }),
+  getById: (id) => api.get(`/agents/${id}`),
+  create: (data) => api.post('/agents', data),
+  update: (id, data) => api.put(`/agents/${id}`, data),
+  delete: (id) => api.delete(`/agents/${id}`),
+  toggleStatus: (id, isActive) => api.patch(`/agents/${id}/status`, { isActive }),
+  resetPassword: (id) => api.post(`/agents/${id}/reset-password`),
 };
 
 // ─── Public Tracking ───────────────────────────────────────────────────────

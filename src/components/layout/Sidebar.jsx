@@ -12,6 +12,7 @@ import {
   BanknotesIcon,
   ChartBarSquareIcon,
   BuildingStorefrontIcon,
+  IdentificationIcon,
 } from '@heroicons/react/24/outline';
 import { useAuthStore } from '../../store/authStore';
 import toast from 'react-hot-toast';
@@ -31,15 +32,31 @@ const adminNav = [
 
 const superadminNav = [
   { to: '/admin/tenants', label: 'Tailor Tenants', icon: BuildingStorefrontIcon },
+  { to: '/admin/agents', label: 'Agents', icon: IdentificationIcon },
 ];
+
+const agentNav = [
+  { to: '/admin/tenants', label: 'My Tailor Tenants', icon: BuildingStorefrontIcon },
+];
+
+const navForRole = (role) => {
+  if (role === 'superadmin') return superadminNav;
+  if (role === 'agent') return agentNav;
+  return adminNav;
+};
+
+const panelLabelForRole = (role) => {
+  if (role === 'superadmin') return 'Platform Admin';
+  if (role === 'agent') return 'Agent Panel';
+  return 'Admin Panel';
+};
 
 export default function Sidebar({ open, onClose }) {
   const navigate = useNavigate();
   const { logout, user } = useAuthStore();
 
-  const isSuperadmin = user?.role === 'superadmin';
-  const navItems = isSuperadmin ? superadminNav : adminNav;
-  const panelLabel = isSuperadmin ? 'Platform Admin' : 'Admin Panel';
+  const navItems = navForRole(user?.role);
+  const panelLabel = panelLabelForRole(user?.role);
 
   const handleLogout = () => {
     logout();

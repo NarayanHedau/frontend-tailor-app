@@ -9,43 +9,36 @@ import {
   XMarkIcon,
   CheckCircleIcon,
   XCircleIcon,
+  EnvelopeIcon,
+  BuildingStorefrontIcon,
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
-import { tenantAPI } from '../../services/api';
+import { agentAPI } from '../../services/api';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { formatDate } from '../../utils/helpers';
-import { useAuthStore } from '../../store/authStore';
 
-const emptyForm = { name: '', email: '', shopName: '', phone: '', password: '' };
+const emptyForm = { name: '', email: '', phone: '', password: '' };
 
-export default function TenantsPage() {
-  const { user } = useAuthStore();
-  const isSuperadmin = user?.role === 'superadmin';
-  const isAgent = user?.role === 'agent';
-
-  const [tenants, setTenants] = useState([]);
+export default function AgentsPage() {
+  const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [createdByFilter, setCreatedByFilter] = useState(''); // Filter by tenant creator
-  const [modal, setModal] = useState(null); // { mode: 'create' | 'edit', tenant? }
+  const [modal, setModal] = useState(null); // { mode: 'create' | 'edit', agent? }
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
-  const [credsModal, setCredsModal] = useState(null); // { email, password }
+  const [credsModal, setCredsModal] = useState(null); // { email, password, emailDelivery }
 
   useEffect(() => {
-    fetchTenants();
+    fetchAgents();
   }, []);
 
-  const fetchTenants = async (q = '', createdBy = '') => {
+  const fetchAgents = async (q = '') => {
     setLoading(true);
     try {
-      const params = {};
-      if (q) params.search = q;
-      if (createdBy) params.createdBy = createdBy;
-      const { data } = await tenantAPI.getAll(params);
-      setTenants(data.data || []);
+      const { data } = await agentAPI.getAll(q ? { search: q } : {});
+      setAgents(data.data || []);
     } catch {
-      toast.error('Failed to load tenants');
+      toast.error('Failed to load agents');
     } finally {
       setLoading(false);
     }
@@ -53,40 +46,7 @@ export default function TenantsPage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchTenants(search.trim(), createdByFilter);
-  };
-
-  const handleCreatorFilterChange = (creatorId) => {
-    setCreatedByFilter(creatorId);
-    fetchTenants(search.trim(), creatorId);
-  };
-
-  // Extract unique creators from tenants for filter dropdown
-  const getUniqueCreators = () => {
-    const creators = new Map();
-    tenants.forEach((t) => {
-      if (t.createdBy && typeof t.createdBy === 'object') {
-        const key = t.createdBy._id || t.createdBy.email;
-        if (!creators.has(key)) {
-          creators.set(key, {
-            _id: t.createdBy._id || t.createdBy.email,
-            name: t.createdBy.name,
-            role: t.createdBy.role,
-          });
-        }
-      }
-    });
-    return Array.from(creators.values()).sort((a, b) => a.name.localeCompare(b.name));
-  };
-
-  // Get displayed tenants (with client-side filter as backup)
-  const getDisplayedTenants = () => {
-    if (!createdByFilter) return tenants;
-    return tenants.filter((t) => {
-      if (!t.createdBy) return false;
-      const creatorId = t.createdBy._id || t.createdBy.email;
-      return String(creatorId) === String(createdByFilter);
-    });
+    fetchAgents(search.trim());
   };
 
   const openCreate = () => {
@@ -94,15 +54,14 @@ export default function TenantsPage() {
     setModal({ mode: 'create' });
   };
 
-  const openEdit = (tenant) => {
+  const openEdit = (agent) => {
     setForm({
-      name: tenant.name || '',
-      email: tenant.email || '',
-      shopName: tenant.shopName || '',
-      phone: tenant.phone || '',
+      name: agent.name || '',
+      email: agent.email || '',
+      phone: agent.phone || '',
       password: '',
     });
-    setModal({ mode: 'edit', tenant });
+    setModal({ mode: 'edit', agent });
   };
 
   const closeModal = () => {
@@ -123,31 +82,33 @@ export default function TenantsPage() {
         const payload = {
           name: form.name.trim(),
           email: form.email.trim(),
-          shopName: form.shopName.trim(),
           phone: form.phone.trim(),
         };
         if (form.password.trim()) payload.password = form.password.trim();
-        const { data } = await tenantAPI.create(payload);
-        toast.success('Tailor tenant created');
+        const { data } = await agentAPI.create(payload);
+        toast.success(data.message || 'Agent created');
         setModal(null);
         setForm(emptyForm);
         if (data?.data?.generatedPassword) {
-          setCredsModal({ email: data.data.email, password: data.data.generatedPassword });
+          setCredsModal({
+            email: data.data.email,
+            password: data.data.generatedPassword,
+            emailDelivery: data.data.emailDelivery,
+          });
         }
-        fetchTenants(search.trim(), createdByFilter);
+        fetchAgents(search.trim());
       } else {
         const payload = {
           name: form.name.trim(),
           email: form.email.trim(),
-          shopName: form.shopName.trim(),
           phone: form.phone.trim(),
         };
         if (form.password.trim()) payload.password = form.password.trim();
-        await tenantAPI.update(modal.tenant._id, payload);
-        toast.success('Tenant updated');
+        await agentAPI.update(modal.agent._id, payload);
+        toast.success('Agent updated');
         setModal(null);
         setForm(emptyForm);
-        fetchTenants(search.trim(), createdByFilter);
+        fetchAgents(search.trim());
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Save failed');
@@ -156,33 +117,37 @@ export default function TenantsPage() {
     }
   };
 
-  const handleToggle = async (tenant) => {
+  const handleToggle = async (agent) => {
     try {
-      await tenantAPI.toggleStatus(tenant._id, !tenant.isActive);
-      toast.success(tenant.isActive ? 'Tenant deactivated' : 'Tenant activated');
-      fetchTenants(search.trim(), createdByFilter);
+      await agentAPI.toggleStatus(agent._id, !agent.isActive);
+      toast.success(agent.isActive ? 'Agent deactivated' : 'Agent activated');
+      fetchAgents(search.trim());
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to update status');
     }
   };
 
-  const handleDelete = async (tenant) => {
-    if (!window.confirm(`Delete tenant "${tenant.name}" (${tenant.email})? This cannot be undone.`)) return;
+  const handleDelete = async (agent) => {
+    if (!window.confirm(`Delete agent "${agent.name}" (${agent.email})? This cannot be undone.`)) return;
     try {
-      await tenantAPI.delete(tenant._id);
-      toast.success('Tenant deleted');
-      fetchTenants(search.trim(), createdByFilter);
+      await agentAPI.delete(agent._id);
+      toast.success('Agent deleted');
+      fetchAgents(search.trim());
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to delete');
     }
   };
 
-  const handleResetPassword = async (tenant) => {
-    if (!window.confirm(`Generate a new password for "${tenant.email}"?`)) return;
+  const handleResetPassword = async (agent) => {
+    if (!window.confirm(`Generate a new password for "${agent.email}"?`)) return;
     try {
-      const { data } = await tenantAPI.resetPassword(tenant._id);
+      const { data } = await agentAPI.resetPassword(agent._id);
       if (data?.data?.generatedPassword) {
-        setCredsModal({ email: data.data.email, password: data.data.generatedPassword });
+        setCredsModal({
+          email: data.data.email,
+          password: data.data.generatedPassword,
+          emailDelivery: data.data.emailDelivery,
+        });
       }
       toast.success('Password reset');
     } catch (err) {
@@ -204,63 +169,41 @@ export default function TenantsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-            {isAgent ? 'My Tailor Tenants' : 'Tailor Tenants'}
-          </h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Agents</h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {tenants.length} tenant{tenants.length === 1 ? '' : 's'}
-            {isAgent ? ' onboarded by you' : ' registered'}
+            {agents.length} agent{agents.length === 1 ? '' : 's'} — they can onboard tailor tenants
           </p>
         </div>
         <button onClick={openCreate} className="btn-primary">
           <PlusIcon className="w-4 h-4" />
-          Add Tenant
+          Add Agent
         </button>
       </div>
 
-      {/* Search and Filter */}
-      <div className="flex flex-col sm:flex-row gap-2">
-        <form onSubmit={handleSearch} className="flex flex-1 gap-2">
-          <div className="relative flex-1">
-            <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              className="input pl-9 w-full"
-              placeholder="Search name, email, shop or phone..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          <button type="submit" className="btn-secondary">
-            Search
-          </button>
-        </form>
-
-        {/* Creator Filter (Superadmin only) */}
-        {isSuperadmin && getUniqueCreators().length > 0 && (
-          <select
-            value={createdByFilter}
-            onChange={(e) => handleCreatorFilterChange(e.target.value)}
-            className="input py-2 flex-1"
-          >
-            <option value="">All Creators</option>
-            {getUniqueCreators().map((creator) => (
-              <option key={creator._id} value={creator._id}>
-                {creator.name}
-                {creator.role === 'superadmin' ? ' (Self)' : ` (${creator.role})`}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
+      {/* Search */}
+      <form onSubmit={handleSearch} className="flex gap-2">
+        <div className="relative flex-1 max-w-md">
+          <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            className="input pl-9"
+            placeholder="Search name, email or phone..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <button type="submit" className="btn-secondary">
+          Search
+        </button>
+      </form>
 
       {/* Table */}
       {loading ? (
         <LoadingSpinner />
-      ) : tenants.length === 0 ? (
+      ) : agents.length === 0 ? (
         <div className="card text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400">No tailor tenants yet.</p>
+          <p className="text-gray-500 dark:text-gray-400">No agents yet.</p>
           <button onClick={openCreate} className="btn-primary mt-4">
-            <PlusIcon className="w-4 h-4" /> Create the first tenant
+            <PlusIcon className="w-4 h-4" /> Create the first agent
           </button>
         </div>
       ) : (
@@ -268,26 +211,39 @@ export default function TenantsPage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 dark:text-gray-400">
               <tr>
-                <th className="text-left px-4 py-3">Tenant</th>
-                <th className="text-left px-4 py-3">Shop</th>
+                <th className="text-left px-4 py-3">Agent</th>
                 <th className="text-left px-4 py-3">Phone</th>
+                <th className="text-left px-4 py-3">Tenants Created</th>
                 <th className="text-left px-4 py-3">Status</th>
-                {isSuperadmin && <th className="text-left px-4 py-3">Created By</th>}
                 <th className="text-left px-4 py-3">Created</th>
                 <th className="text-right px-4 py-3">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-              {getDisplayedTenants().map((t) => (
-                <tr key={t._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+              {agents.map((a) => (
+                <tr key={a._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                   <td className="px-4 py-3">
-                    <p className="font-medium text-gray-800 dark:text-white">{t.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{t.email}</p>
+                    <p className="font-medium text-gray-800 dark:text-white">{a.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{a.email}</p>
                   </td>
-                  <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{t.shopName || '—'}</td>
-                  <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{t.phone || '—'}</td>
+                  <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{a.phone || '—'}</td>
                   <td className="px-4 py-3">
-                    {t.isActive ? (
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                        (a.tenantCount || 0) > 0
+                          ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/40 dark:text-primary-200'
+                          : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+                      }`}
+                    >
+                      <BuildingStorefrontIcon className="w-3.5 h-3.5" />
+                      {a.tenantCount || 0}
+                      <span className="hidden sm:inline">
+                        {(a.tenantCount || 0) === 1 ? 'tenant' : 'tenants'}
+                      </span>
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {a.isActive ? (
                       <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
                         <CheckCircleIcon className="w-3 h-3" /> Active
                       </span>
@@ -297,63 +253,39 @@ export default function TenantsPage() {
                       </span>
                     )}
                   </td>
-                  {isSuperadmin && (
-                    <td className="px-4 py-3">
-                      {t.createdBy && typeof t.createdBy === 'object' ? (
-                        t.createdBy.role === 'superadmin' ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">
-                            Self created
-                          </span>
-                        ) : (
-                          <div>
-                            <p className="text-gray-800 dark:text-gray-100 text-sm">{t.createdBy.name}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                              {t.createdBy.role}
-                            </p>
-                          </div>
-                        )
-                      ) : (
-                        <span className="text-xs text-gray-400">—</span>
-                      )}
-                    </td>
-                  )}
-                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{formatDate(t.createdAt)}</td>
+                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{formatDate(a.createdAt)}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      {isSuperadmin && (
-                        <button
-                          onClick={() => handleToggle(t)}
-                          className={`p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                            t.isActive ? 'text-amber-600' : 'text-green-600'
-                          }`}
-                          title={t.isActive ? 'Deactivate' : 'Activate'}
-                        >
-                          {t.isActive ? <XCircleIcon className="w-4 h-4" /> : <CheckCircleIcon className="w-4 h-4" />}
-                        </button>
-                      )}
                       <button
-                        onClick={() => handleResetPassword(t)}
+                        onClick={() => handleToggle(a)}
+                        className={`p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                          a.isActive ? 'text-amber-600' : 'text-green-600'
+                        }`}
+                        title={a.isActive ? 'Deactivate' : 'Activate'}
+                      >
+                        {a.isActive ? <XCircleIcon className="w-4 h-4" /> : <CheckCircleIcon className="w-4 h-4" />}
+                      </button>
+                      <button
+                        onClick={() => handleResetPassword(a)}
                         className="p-1.5 rounded text-primary-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                         title="Reset password"
                       >
                         <KeyIcon className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => openEdit(t)}
+                        onClick={() => openEdit(a)}
                         className="p-1.5 rounded text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                         title="Edit"
                       >
                         <PencilSquareIcon className="w-4 h-4" />
                       </button>
-                      {isSuperadmin && (
-                        <button
-                          onClick={() => handleDelete(t)}
-                          className="p-1.5 rounded text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30"
-                          title="Delete"
-                        >
-                          <TrashIcon className="w-4 h-4" />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => handleDelete(a)}
+                        className="p-1.5 rounded text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30"
+                        title="Delete"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -369,7 +301,7 @@ export default function TenantsPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <h3 className="font-semibold text-gray-800 dark:text-white">
-                {modal.mode === 'create' ? 'Add Tailor Tenant' : 'Edit Tenant'}
+                {modal.mode === 'create' ? 'Add Agent' : 'Edit Agent'}
               </h3>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
                 <XMarkIcon className="w-5 h-5" />
@@ -377,7 +309,7 @@ export default function TenantsPage() {
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="label">Owner name *</label>
+                <label className="label">Name *</label>
                 <input
                   className="input"
                   value={form.name}
@@ -394,14 +326,11 @@ export default function TenantsPage() {
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   required
                 />
-              </div>
-              <div>
-                <label className="label">Shop name</label>
-                <input
-                  className="input"
-                  value={form.shopName}
-                  onChange={(e) => setForm({ ...form, shopName: e.target.value })}
-                />
+                {modal.mode === 'create' && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Credentials will be emailed here (if SMTP is configured).
+                  </p>
+                )}
               </div>
               <div>
                 <label className="label">Phone</label>
@@ -436,7 +365,7 @@ export default function TenantsPage() {
                   Cancel
                 </button>
                 <button type="submit" className="btn-primary" disabled={saving}>
-                  {saving ? 'Saving...' : modal.mode === 'create' ? 'Create Tenant' : 'Save Changes'}
+                  {saving ? 'Saving...' : modal.mode === 'create' ? 'Create Agent' : 'Save Changes'}
                 </button>
               </div>
             </form>
@@ -444,17 +373,25 @@ export default function TenantsPage() {
         </div>
       )}
 
-      {/* Credentials modal (shown once after create / reset-password) */}
+      {/* Credentials modal */}
       {credsModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="font-semibold text-gray-800 dark:text-white">Tenant Credentials</h3>
+              <h3 className="font-semibold text-gray-800 dark:text-white">Agent Credentials</h3>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Copy and share with the tenant now — this password won't be shown again.
+                {credsModal.emailDelivery?.sent
+                  ? 'These credentials have been emailed to the agent. Shown here for your reference — won\'t be shown again.'
+                  : 'Email delivery skipped. Copy and share these manually — won\'t be shown again.'}
               </p>
             </div>
             <div className="p-6 space-y-3">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-900/50 text-xs">
+                <EnvelopeIcon className="w-4 h-4 text-gray-400" />
+                <span className={credsModal.emailDelivery?.sent ? 'text-green-700 dark:text-green-400' : 'text-amber-700 dark:text-amber-400'}>
+                  {credsModal.emailDelivery?.sent ? 'Email sent successfully' : 'Email not sent — share manually'}
+                </span>
+              </div>
               <div>
                 <label className="label">Email</label>
                 <div className="flex items-center gap-2">
