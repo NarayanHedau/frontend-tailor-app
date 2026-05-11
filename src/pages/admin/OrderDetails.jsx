@@ -242,26 +242,36 @@ export default function OrderDetails() {
                   </select>
 
                   {/* Image */}
-                  {item.cloth_image ? (
-                    <img
-                      src={item.cloth_image}
-                      alt="Cloth"
-                      className="w-16 h-16 rounded-lg object-cover border border-gray-200 dark:border-gray-700 cursor-pointer"
-                      onClick={() => window.open(item.cloth_image, '_blank')}
-                    />
-                  ) : (
+                  <div className="space-y-1">
+                    {item.cloth_image ? (
+                      <img
+                        src={item.cloth_image}
+                        alt="Cloth"
+                        className="w-16 h-16 rounded-lg object-cover border border-gray-200 dark:border-gray-700 cursor-pointer"
+                        onClick={() => window.open(item.cloth_image, '_blank')}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => fileRefs.current[item._id]?.click()}
+                        className="w-16 h-16 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center text-gray-400 hover:border-primary-400 hover:text-primary-400 transition-colors"
+                      >
+                        <CameraIcon className="w-5 h-5" />
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => fileRefs.current[item._id]?.click()}
-                      className="w-16 h-16 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center text-gray-400 hover:border-primary-400 hover:text-primary-400 transition-colors"
+                      className="btn-secondary btn-sm w-full text-xs"
                     >
-                      <CameraIcon className="w-5 h-5" />
+                      Upload / Capture
                     </button>
-                  )}
+                  </div>
                   <input
                     ref={(el) => (fileRefs.current[item._id] = el)}
                     type="file"
                     accept="image/*"
+                    capture="environment"
                     className="hidden"
                     onChange={(e) => e.target.files[0] && handleImageUpload(item._id, e.target.files[0])}
                   />
